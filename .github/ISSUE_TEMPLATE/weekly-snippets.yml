@@ -1,0 +1,68 @@
+name: "Weekly Snippets"
+description: "Add supplemental context for this week's snippet (Key Decisions/Ships, XLT Discussion, Celebrations, More Updates)"
+title: "Weekly Snippets: Week of <YYYY-MM-DD>"
+labels:
+  - weekly-snippets
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Weekly Snippets — Supplemental Context
+
+        Use this issue to add details you want included in this week's snippet that may not be captured in meeting notes. The **Weekly Snippets Agent** will combine this with meeting notes from the week to generate your Friday update.
+
+        All fields are optional — only fill in what's relevant this week.
+
+  - type: input
+    id: week_ending
+    attributes:
+      label: "Week Ending (Friday)"
+      description: "The Friday date this snippet covers (YYYY-MM-DD)"
+      placeholder: "2026-02-06"
+    validations:
+      required: true
+
+  - type: textarea
+    id: key_decisions_ships
+    attributes:
+      label: "Key Decisions or Ships 🚢"
+      description: "Decisions made or ships completed this week that you made or were involved in — impacting customers, team, or projects."
+      placeholder: |
+        - Decision made with [person/team] to [action]. This impacts [business outcome].
+        - Shipped [deliverable] for [customer/project]. Impact: [outcome].
+
+  - type: textarea
+    id: xlt_discussion
+    attributes:
+      label: "Important topics for CSA-XLT Discussion 🛑"
+      description: "Topics to flag for CSA-XLT awareness — risks, blockers, decisions needed, metrics/insights requiring team input."
+      placeholder: |
+        - Risk: [threat/pattern] presents risk to [area]. Recommend [mitigation].
+        - For discussion: can we consider [idea]? This would drive [outcome].
+        - Insight: seeing a trend of [pattern]. Flagging because [impact].
+
+  - type: textarea
+    id: celebrations
+    attributes:
+      label: "Celebrations 🎉"
+      description: "Key wins and kudos to share with the team."
+      placeholder: |
+        - Shoutout to @handle for [what they did and why it mattered].
+
+  - type: textarea
+    id: more_updates
+    attributes:
+      label: "More Updates 👇"
+      description: "Summary or highlights of your work — progress on customer projects, challenges, solutions, upcoming focus areas, or other relevant updates."
+      placeholder: |
+        - [Customer]: [progress update, challenge faced, solution implemented].
+        - Next week: focus on [deliverable/project/meeting].
+
+  - type: textarea
+    id: additional_context
+    attributes:
+      label: "Additional Context"
+      description: "Anything else the agent should consider when writing this week's snippet. This can include context not captured in meeting notes — ad-hoc conversations, Slack threads, email exchanges, etc."
+      placeholder: |
+        - Had an off-the-record conversation with [customer] about [topic]...
+        - Noticed in Slack that [insight]...

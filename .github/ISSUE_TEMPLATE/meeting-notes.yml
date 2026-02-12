@@ -1,0 +1,72 @@
+name: "Meeting Notes"
+description: "Capture meeting notes for the Notes Agent to process and refine"
+title: "Meeting Notes: <Account Name> - <Date>"
+labels:
+  - meeting-notes
+body:
+  - type: input
+    id: account_name
+    attributes:
+      label: "Account Name"
+      description: "Customer/account name for this meeting"
+      placeholder: "Acme Corp"
+    validations:
+      required: true
+  - type: input
+    id: meeting_date
+    attributes:
+      label: "Meeting Date"
+      description: "Date of the meeting (YYYY-MM-DD)"
+      placeholder: "2026-02-02"
+    validations:
+      required: true
+  - type: dropdown
+    id: meeting_type
+    attributes:
+      label: "Meeting Type"
+      options:
+        - Intro Call
+        - Weekly/Bi-Weekly/Monthly Sync
+        - Internal GitHub Call
+        - QBR
+        - Technical Review
+        - Office Hours
+        - Success Plan Review
+        - Enablement Session
+        - Health Check
+        - Ad-hoc / Other
+    validations:
+      required: true
+  - type: input
+    id: attendees
+    attributes:
+      label: "Attendees"
+      description: "Comma-separated list of attendees"
+      placeholder: "Jane Doe (Customer), @octocat (GitHub)"
+  - type: textarea
+    id: meeting_purpose
+    attributes:
+      label: "Meeting Purpose / Agenda"
+      description: "Brief summary of the meeting's purpose or agenda items"
+      placeholder: "Monthly sync/QBR/etc"
+  - type: textarea
+    id: raw_notes
+    attributes:
+      label: "Raw Notes / Transcript"
+      description: "Paste your raw meeting notes, transcript, or unstructured text here. The Notes Agent will refine these into polished notes."
+      placeholder: "Notes go here..."
+    validations:
+      required: true
+  - type: textarea
+    id: action_items
+    attributes:
+      label: "Action Items (if known)"
+      description: "Any clear action items or follow-ups from the meeting"
+      placeholder: |
+        - [ ] Placeholder
+  - type: textarea
+    id: focus_areas
+    attributes:
+      label: "Focus Areas / Special Requests"
+      description: "Any specific areas you want the Notes Agent to highlight or focus on"
+      placeholder: "Please emphasize the security concerns and proposed mitigations"

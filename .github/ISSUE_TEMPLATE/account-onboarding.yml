@@ -1,0 +1,107 @@
+name: "Account Onboarding"
+description: "Create account scaffolding (overview, meeting notes, success plan) via Issue Ops"
+title: "New Account: <Account Name>"
+labels:
+  - account-onboarding
+  - automation
+body:
+  - type: input
+    id: account_name
+    attributes:
+      label: "Account Name"
+      description: "Official account name"
+      placeholder: "Acme Corp"
+    validations:
+      required: true
+  - type: input
+    id: folder_name
+    attributes:
+      label: "Folder Name (optional)"
+      description: "PascalCase folder name; default derived from Account Name"
+      placeholder: "AcmeCorp"
+  - type: dropdown
+    id: status
+    attributes:
+      label: "Status"
+      options:
+        - Active
+        - Prospect
+        - In Progress
+    validations:
+      required: true
+  - type: input
+    id: engagement
+    attributes:
+      label: "Engagement"
+      description: "e.g., Mid-Market CSA, FastTrack"
+  - type: input
+    id: industry
+    attributes:
+      label: "Industry"
+      placeholder: "N/A"
+  - type: markdown
+    attributes:
+      value: "### Deal Details"
+  - type: input
+    id: deal_size
+    attributes:
+      label: "Deal Size"
+      placeholder: "$X"
+  - type: dropdown
+    id: deal_type
+    attributes:
+      label: "Deal Type"
+      options:
+        - New
+        - Expansion
+        - Renewal
+  - type: input
+    id: total_developers
+    attributes:
+      label: "Total Developers"
+      placeholder: "250"
+  - type: input
+    id: ghe_seats
+    attributes:
+      label: "GHE Seats"
+      placeholder: "200"
+  - type: input
+    id: ghas_seats
+    attributes:
+      label: "GHAS Seats"
+      placeholder: "150"
+  - type: input
+    id: copilot_business_seats
+    attributes:
+      label: "Copilot Business Seats"
+      placeholder: "100"
+  - type: input
+    id: copilot_enterprise_seats
+    attributes:
+      label: "Copilot Enterprise Seats"
+      placeholder: "50"
+  - type: markdown
+    attributes:
+      value: "### Contacts"
+  - type: textarea
+    id: customer_stakeholders
+    attributes:
+      label: "Customer Stakeholders (table)"
+      description: "Use a markdown table with headers: Name | Role | Notes"
+      placeholder: "| Name | Role | Notes |\n| --- | --- | --- |\n| Jane Doe | VP Eng | Champion |"
+  - type: textarea
+    id: github_team
+    attributes:
+      label: "GitHub Team (table)"
+      placeholder: "| Handle | Role | Notes |\n| --- | --- | --- |\n| @octocat | CSA | Primary |"
+  - type: textarea
+    id: notes
+    attributes:
+      label: "Notes"
+      placeholder: "Key context, risks, priorities"
+  - type: textarea
+    id: stafftools_licensing
+    attributes:
+      label: "Stafftools Licensing Overview (optional)"
+      description: "Paste the licensing overview block from stafftools (markdown tables)"
+      placeholder: "## Licensing overview for <account>\n..."

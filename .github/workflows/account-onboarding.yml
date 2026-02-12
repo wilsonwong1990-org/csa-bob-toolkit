@@ -1,0 +1,124 @@
+name: Account Onboarding
+
+on:
+  issues:
+    types:
+      - opened
+      - edited
+
+permissions:
+  contents: write
+  issues: write
+  pull-requests: write
+
+jobs:
+  scaffold:
+    if: contains(toJson(github.event.issue.labels), 'account-onboarding')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Generate account scaffold
+        id: scaffold
+        run: |
+          python .github/scripts/account-onboarding.py "$GITHUB_EVENT_PATH" > /tmp/account-data.json
+          cat /tmp/account-data.json
+          account_name=$(jq -r .accountName /tmp/account-data.json)
+          folder_name=$(jq -r .folderName /tmp/account-data.json)
+          created_files=$(jq -r '.createdFiles | join(", ")' /tmp/account-data.json)
+          echo "account_name=$account_name" >> $GITHUB_OUTPUT
+          echo "folder_name=$folder_name" >> $GITHUB_OUTPUT
+          echo "created_files=$created_files" >> $GITHUB_OUTPUT
+
+      - name: Create account labels
+        uses: actions/github-script@v7
+        env:
+          ACCOUNT_NAME: ${{ steps.scaffold.outputs.account_name }}
+          FOLDER_NAME: ${{ steps.scaffold.outputs.folder_name }}
+        with:
+          script: |
+            const { ACCOUNT_NAME, FOLDER_NAME } = process.env;
+            const labels = [
+              { name: `account/${FOLDER_NAME}`, description: `Account: ${ACCOUNT_NAME}` }
+            ];
+            for (const label of labels) {
+              try {
+                await github.rest.issues.createLabel({ ...context.repo, ...label });
+              } catch (error) {
+                if (error.status !== 422) throw error;
+              }
+            }
+
+      - name: Label onboarding issue with account label
+        uses: actions/github-script@v7
+        env:
+          ACCOUNT_LABEL: account/${{ steps.scaffold.outputs.folder_name }}
+        with:
+          script: |
+            const issue_number = context.issue.number;
+            const label = process.env.ACCOUNT_LABEL;
+            try {
+              await github.rest.issues.addLabels({ ...context.repo, issue_number, labels: [label] });
+            } catch (error) {
+              if (error.status !== 422) throw error;
+            }
+
+      - name: Create Pull Request
+        id: cpr
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "Add account ${{ steps.scaffold.outputs.account_name }}"
+          branch: "account/${{ steps.scaffold.outputs.folder_name }}"
+          title: "Add account ${{ steps.scaffold.outputs.account_name }}"
+          body: |
+            Closes #${{ github.event.issue.number }}
+
+            Files created:
+            ${{ steps.scaffold.outputs.created_files }}
+
+      - name: Comment on issue with PR link
+        if: steps.cpr.outputs.pull-request-url != ''
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const issue_number = context.issue.number;
+            const prUrl = "${{ steps.cpr.outputs.pull-request-url }}";
+            const createdFiles = "${{ steps.scaffold.outputs.created_files }}";
+            const accountName = "${{ steps.scaffold.outputs.account_name }}";
+            const lines = [
+              `Scaffolded account **${accountName}**.`,
+              '',
+              `Created files: ${createdFiles || 'none (account may already exist)'}`,
+              `PR: ${prUrl}`
+            ];
+            await github.rest.issues.createComment({
+              ...context.repo,
+              issue_number,
+              body: lines.join('\n')
+            });
+
+      - name: Comment on issue when no PR
+        if: steps.cpr.outputs.pull-request-url == ''
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const issue_number = context.issue.number;
+            const createdFiles = "${{ steps.scaffold.outputs.created_files }}";
+            const accountName = "${{ steps.scaffold.outputs.account_name }}";
+            const lines = [
+              `No changes generated for **${accountName}**.`,
+              '',
+              createdFiles ? `Files created: ${createdFiles}` : 'Account folder may already exist or no changes were necessary.',
+            ];
+            await github.rest.issues.createComment({
+              ...context.repo,
+              issue_number,
+              body: lines.join('\n')
+            });

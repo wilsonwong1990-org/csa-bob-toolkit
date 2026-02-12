@@ -1,0 +1,175 @@
+name: "Success Plan Builder"
+description: "Create or update a Success Plan for an account with metrics and goals"
+title: "Success Plan: <Account Name>"
+labels:
+  - success-plan
+body:
+  - type: input
+    id: account_name
+    attributes:
+      label: "Account Name"
+      description: "Customer/account name for this success plan"
+      placeholder: "Acme Corp"
+    validations:
+      required: true
+  - type: input
+    id: last_updated
+    attributes:
+      label: "Metrics Last Updated Date"
+      description: "Date when metrics were pulled (YYYY-MM-DD)"
+      placeholder: "2026-02-03"
+    validations:
+      required: true
+
+  - type: markdown
+    attributes:
+      value: "---\n## Copilot Metrics\nGet from [PowerBI Dashboard](https://app.powerbi.com/groups/me/apps/4228f24e-b40d-4842-bd8f-e3db765e5486/reports/0db04a61-4c2d-4530-9934-5db400b341a8/2e0c87240e500b000a99?ctid=398a6654-997b-47e9-b12b-9515b896b4de&experience=power-bi&clientSideAuth=0)"
+  - type: input
+    id: copilot_licensed_users
+    attributes:
+      label: "Copilot Licensed Users"
+      placeholder: "150"
+  - type: input
+    id: copilot_installation_rate
+    attributes:
+      label: "Copilot Installation Rate (%)"
+      placeholder: "85"
+  - type: input
+    id: copilot_active_users
+    attributes:
+      label: "Copilot Active Users (%)"
+      placeholder: "72"
+  - type: input
+    id: copilot_engaged_users
+    attributes:
+      label: "Copilot Engaged Users (%)"
+      placeholder: "65"
+  - type: input
+    id: copilot_gap_active_engaged
+    attributes:
+      label: "Gap between Active & Engaged (%)"
+      placeholder: "7"
+
+  - type: markdown
+    attributes:
+      value: "---\n## GHAS Metrics\nGet from [GHAS Dashboard](https://dataexplorer.azure.com/dashboards/eee0921c-1c35-4ac5-abde-ef425eebd0dc?p-_startTime=60days&p-_endTime=now)"
+  - type: input
+    id: ghas_used_seats
+    attributes:
+      label: "GHAS Used Seats"
+      placeholder: "120"
+  - type: input
+    id: ghas_purchased_seats
+    attributes:
+      label: "GHAS Purchased Seats"
+      placeholder: "200"
+  - type: input
+    id: ghas_secret_scanning_repos_number
+    attributes:
+      label: "Number of Repos with Secret Scanning Enabled"
+      placeholder: "100"
+  - type: input
+    id: ghas_secret_scanning_coverage_pct
+    attributes:
+      label: "Secret Scanning Coverage (%)"
+      placeholder: "85"
+  - type: input
+    id: ghas_code_scanning_repos_number
+    attributes:
+      label: "Number of Repos with Code Scanning Enabled"
+      placeholder: "60"
+  - type: input
+    id: ghas_code_scanning_coverage_pct
+    attributes:
+      label: "Code Scanning Coverage (%)"
+      placeholder: "55"
+
+  - type: markdown
+    attributes:
+      value: "---\n## GHE Metrics\n Get from [Stafftools, replacing <customer> with customer's slug](https://admin.github.com/stafftools/enterprises/<customer>/licensing)"
+  - type: input
+    id: ghe_used_seats
+    attributes:
+      label: "GHE Used Seats"
+      placeholder: "450"
+  - type: input
+    id: ghe_purchased_seats
+    attributes:
+      label: "GHE Purchased Seats"
+      placeholder: "500"
+  - type: dropdown
+    id: ghe_deployment_model
+    attributes:
+      label: "Deployment Model"
+      options:
+        - EMU
+        - GHEC
+        - GHES
+        - GHEC with Residency
+        - Hybrid
+        - Unknown
+
+  - type: markdown
+    attributes:
+      value: "---\n## Actions Metrics\n Get from [Actions Dashboard](https://app.powerbi.com/groups/me/reports/0bdb9a60-970d-4836-a7d3-7391fba8682e/ReportSection3215b3ca3f7bc57553da?ctid=398a6654-997b-47e9-b12b-9515b896b4de&experience=power-bi)\n You only need to fill out one. "
+  - type: input
+    id: actions_avg_minutes_year
+    attributes:
+      label: "Avg Actions Minutes/Month (Last Year)"
+      placeholder: "50000"
+  - type: input
+    id: actions_avg_storage_year
+    attributes:
+      label: "Avg Actions Storage GB-hr/Month (Last Year)"
+      placeholder: "120"
+  - type: input
+    id: actions_avg_minutes_3mo
+    attributes:
+      label: "Avg Actions Minutes/Month (Last 3 Months)"
+      placeholder: "55000"
+  - type: input
+    id: actions_gh_hosted_minutes_30d
+    attributes:
+      label: "GitHub-Hosted Runner Minutes (Last 30 Days)"
+      placeholder: "40000"
+  - type: input
+    id: actions_self_hosted_minutes_30d
+    attributes:
+      label: "Self-Hosted Runner Minutes (Last 30 Days)"
+      placeholder: "15000"
+
+  - type: markdown
+    attributes:
+      value: "---\n## Context for Success Plan Agent\nThe following fields provide additional context to generate summaries, goals, gaps, and key activities. The Success Plan Agent will use scan the accounts directory but this can help guide the Agent with additional context."
+  - type: textarea
+    id: business_context
+    attributes:
+      label: "Business Context / Customer Objectives"
+      description: "Key business drivers, strategic priorities, upcoming initiatives, or renewal context"
+      placeholder: |
+        - Migrating from GitLab by Q3
+        - CTO priority: AI-assisted development
+        - Renewal in 6 months
+  - type: textarea
+    id: current_challenges
+    attributes:
+      label: "Current Challenges / Known Gaps"
+      description: "Any blockers, adoption issues, competitive pressures, or organizational challenges"
+      placeholder: |
+        - Security team hesitant on Copilot
+        - Low GHAS adoption due to false positive concerns
+        - Actions migration from Jenkins incomplete
+  - type: textarea
+    id: recent_engagements
+    attributes:
+      label: "Recent Engagements / Enablement Sessions"
+      description: "List any recent meetings, workshops, or enablement sessions conducted that may be missed in the accounts directory"
+      placeholder: |
+        - Copilot Workshop (Jan 2026)
+        - GHAS Roadmap session (Dec 2025)
+  - type: textarea
+    id: focus_areas
+    attributes:
+      label: "Focus Areas / Special Requests"
+      description: "Any specific areas you want the Success Plan Agent to prioritize"
+      placeholder: "Ensure the following skills are used: CTA-selection-framework, gainsight-formating-guidelines, success-plan-no-data, and success-planning-dates"
